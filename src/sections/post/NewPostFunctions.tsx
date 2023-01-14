@@ -17,15 +17,15 @@ const dataTypes = {
   ],
 };
 
-// export const signData = async (user, data) => {
-//   const privateKey =
-//     web3.eth.currentProvider.wallets[user.toLowerCase()].getPrivateKey();
-//   return signTypedData({
-//     data: data,
-//     privateKey: privateKey,
-//     version: SignTypedDataVersion.V4,
-//   });
-// };
+export const signData = async (user, data) => {
+  const privateKey =
+    web3.eth.currentProvider.wallets[user.toLowerCase()].getPrivateKey();
+  return signTypedData({
+    data: data,
+    privateKey: privateKey,
+    version: SignTypedDataVersion.V4,
+  });
+};
 
 export const generateData = async (action: Action) => {
   const actionType = {
@@ -108,13 +108,13 @@ export const processActions = async (
     actions.map(async (action: Action) => {
       const data = await generateData(action);
       console.log("✍️ with data:", data);
-      // const sig = await signData(action.sender, data);
-      // const sigData = await verifyAndSplitSig(sig, action.sender, data);
+      const sig = await signData(action.sender, data);
+      const sigData = await verifyAndSplitSig(sig, action.sender, data);
 
-      // return {
-      //   data: data,
-      //   sigData: sigData,
-      // };
+      return {
+        data: data,
+        sigData: sigData,
+      };
     })
   );
 

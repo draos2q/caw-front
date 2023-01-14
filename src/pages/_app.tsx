@@ -10,21 +10,26 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 //Web3
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { WagmiConfig, createClient, chain, configureChains } from "wagmi";
+// import { WagmiConfig, createClient, chain, configureChains } from "wagmi";
+import {
+  WagmiConfig,
+  createClient,
+  configureChains,
+  mainnet,
+  goerli,
+} from "wagmi";
 import { infuraProvider } from "wagmi/providers/infura";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
-import theme from '../theme'
-import { CAWProvider } from 'src/context/WalletConnectContext'
+import theme from "../theme";
+import { CAWProvider } from "src/context/WalletConnectContext";
 
 //* Web3 connector and layer
-const { chains, provider } = configureChains(
+const { chains, provider, webSocketProvider } = configureChains(
+  [goerli],
   [
-    chain.goerli
-  ],
-  [
-    infuraProvider({ apiKey: process.env.INFURA_API_KEY, priority: 0, }),
+    infuraProvider({ apiKey: process.env.INFURA_API_KEY, priority: 0 }),
     alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY, priority: 1 }),
     publicProvider({ priority: 2 }),
   ]
@@ -59,7 +64,7 @@ export default function MyApp(props: MyAppProps) {
         <WagmiConfig client={wagmiClient}>
           <RainbowKitProvider chains={chains}>
             <CAWProvider>
-            {/* This allows us to use diferent layouts for each type of pages (i.e dashboard, landing page, etc) */}
+              {/* This allows us to use diferent layouts for each type of pages (i.e dashboard, landing page, etc) */}
               {getLayout(<Component {...pageProps} />)}
             </CAWProvider>
           </RainbowKitProvider>
